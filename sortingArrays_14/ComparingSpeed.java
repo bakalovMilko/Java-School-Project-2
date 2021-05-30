@@ -7,32 +7,37 @@ public class ComparingSpeed {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		System.out.println("Array size | Selection Sort | Bubble Sort | MergeSort | Quick Sort");
-		for(int i = 500; i<3500; i+= 500) {
+		String headingFormat = "%-12s%-7s%-10s%-6s%-6s%n";
+		String dataFormat = "%-12d%-7d%-10d%-6d%-6d%n";
+		System.out.printf(headingFormat, "Array size", "Bubble", "Selection", "Merge", "Quick");
+		for(int i = 5000; i<35000; i+= 5000) {
 			int[] array = randomArray(i);
 			int[] workArray = array.clone(); 
 			
 			long timeBeginning = System.currentTimeMillis();
 			bubbleSort(workArray);
 			long timeEnd = System.currentTimeMillis();
-			long timeBubble = timeEnd - timeBeginning;
-			
-			timeBeginning = System.currentTimeMillis();
-			insertionSort(workArray);
+			long timeBubble = timeEnd - timeBeginning;     
+			                                               
+			workArray = array.clone();                     
+			timeBeginning = System.currentTimeMillis();    
+			selectionSort(workArray);
 			timeEnd = System.currentTimeMillis();
-			long timeInsertion = timeEnd - timeBeginning;
+			long timeSelection = timeEnd - timeBeginning;
 			
+			workArray = array.clone();
 			timeBeginning = System.currentTimeMillis();
 			mergeSort(workArray);
 			timeEnd = System.currentTimeMillis();
 			long timeMerge = timeEnd - timeBeginning;
 			
+			workArray = array.clone();
 			timeBeginning = System.currentTimeMillis();
 			quickSort(workArray);
 			timeEnd = System.currentTimeMillis();
 			long timeQuick = timeEnd - timeBeginning;
 			
-			System.out.println(i + " | " + timeBubble + " | " + timeInsertion + " | " + timeMerge + " | " + timeQuick);
+			System.out.printf(dataFormat, i, timeBubble, timeSelection, timeMerge, timeQuick);
 		}
 	}
 	public static void bubbleSort(int[] list) {
@@ -47,21 +52,23 @@ public class ComparingSpeed {
 			}
 		}
 	}
-	public static void insertionSort(int[] list) {
-		for (int i = 1; i < list.length; i++) {
-			/**
-			 * Insert list[i] into a sorted sublist
-			 *  list[0..i-1] so that list[0..i] is
-			 * sorted.
-			 */
-			int currentElement = list[i];
-			int k;
-			for (k = i - 1; k >= 0 && list[k] > currentElement; k--) {
-				list[k + 1] = list[k];
-			}
-// Insert the current element into list[k + 1]
-			list[k + 1] = currentElement;
-		}
+	public static void selectionSort(int[] list) {
+		for (int i = 0; i < list.length - 1; i++) {
+			// Find the minimum in the list[i..list.length-1]
+						int currentMin = list[i];
+						int currentMinIndex = i;
+						for (int j = i + 1; j < list.length; j++) {
+							if (currentMin > list[j]) {
+								currentMin = list[j];
+								currentMinIndex = j;
+							}
+						}
+			// Swap list[i] with list[currentMinIndex] if necessary
+						if (currentMinIndex != i) {
+							list[currentMinIndex] = list[i];
+							list[i] = currentMin;
+						}
+					}
 	}
 	public static void mergeSort(int[] list) {
 		if (list.length > 1) {
@@ -151,6 +158,7 @@ public class ComparingSpeed {
 				itr.next();
 			}
 			array[i] = itr.next();
+			set.remove(array[i]);
 		}
 		return array;
 	}
